@@ -17,6 +17,10 @@ type SonarrClient struct {
 
 func NewSonarrClient(address string, apiKey string) (*SonarrClient, error) {
 
+	if address == "" {
+		return nil, errors.New("No address specified")
+	}
+
 	addressUrl, err := url.Parse(address)
 
 	path := addressUrl.Path
