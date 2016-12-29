@@ -2,7 +2,7 @@ package go_sonarr
 
 import "fmt"
 
-func (sc *SonarrClient) SeriesLookup(term string) (*SeriesLookupGetResponse, error) {
+func (sc *SonarrClient) SeriesLookup(term string) (SeriesLookupGetResponse, error) {
 
 	var rv *SeriesLookupGetResponse
 
@@ -12,18 +12,16 @@ func (sc *SonarrClient) SeriesLookup(term string) (*SeriesLookupGetResponse, err
 		return nil, err
 	}
 
-	return rv, nil
+	return *rv, nil
 }
 
 
-func (sc *SonarrClient) CreateSeries(tvdbId int) (*SeriesPostResponse, error) {
+func (sc *SonarrClient) CreateSeries(tvdbId int) (SeriesPostResponse, error) {
 	//first lookup data
-	slrptr, err := sc.SeriesLookup(fmt.Sprintf("tvdb:%v", tvdbId))
-
-	slr := *slrptr
+	slr, err := sc.SeriesLookup(fmt.Sprintf("tvdb:%v", tvdbId))
 
 	if err != nil {
-		return nil, err
+		return SeriesPostResponse{}, err
 	}
 
 	//copy what we need
@@ -35,13 +33,13 @@ func (sc *SonarrClient) CreateSeries(tvdbId int) (*SeriesPostResponse, error) {
 		Images: slr[0].Images,
 	}
 
-	var spr_out *SeriesPostResponse
+	var spr_out SeriesPostResponse
 
 	//then add it
-	err = sc.DoRequest("POST", "series", nil, spr_in, spr_out)
+	err = sc.DoRequest("POST", "series", nil, spr_in, &spr_out)
 
 	if err != nil {
-		return nil, err
+		return SeriesPostResponse{}, err
 	}
 
 	return spr_out, nil
