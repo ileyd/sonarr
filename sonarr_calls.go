@@ -24,19 +24,10 @@ func (sc *SonarrClient) CreateSeries(tvdbId int) (SeriesPostResponse, error) {
 		return SeriesPostResponse{}, err
 	}
 
-	//copy what we need
-	spr_in := &SeriesPostResponse{
-		TvdbID: tvdbId,
-		Title: slr[0].Title,
-		QualityProfileID: slr[0].QualityProfileID,
-		TitleSlug: slr[0].TitleSlug,
-		Images: slr[0].Images,
-	}
-
 	var spr_out SeriesPostResponse
 
-	//then add it
-	err = sc.DoRequest("POST", "series", nil, spr_in, &spr_out)
+	//then pass the whole lot back
+	err = sc.DoRequest("POST", "series", nil, slr[0], &spr_out)
 
 	if err != nil {
 		return SeriesPostResponse{}, err
