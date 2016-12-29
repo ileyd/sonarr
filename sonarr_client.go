@@ -8,6 +8,7 @@ import (
 	"errors"
 	"strings"
 	"bytes"
+	"io/ioutil"
 )
 
 type SonarrClient struct {
@@ -86,7 +87,11 @@ func (sc *SonarrClient) DoRequest(action, path string, params map[string]string,
 		return errors.New(fmt.Sprintf("Status code %v", response.StatusCode))
 	}
 
-	err = json.NewDecoder(response.Body).Decode(resData)
+	body, err := ioutil.ReadAll(response.Body)
+	fmt.Println(string(body))
+	err = json.NewDecoder(bytes.NewBuffer(body)).Decode(resData)
+
+	//err = json.NewDecoder(response.Body).Decode(resData)
 
 	if err != nil {
 		return err

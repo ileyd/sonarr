@@ -2,44 +2,22 @@ package go_sonarr
 
 import "time"
 
-type SeriesPostResponse struct {
-	Title string `json:"title,omitempty"`
-	SeasonCount int `json:"seasonCount,omitempty"`
-	EpisodeCount int `json:"episodeCount,omitempty"`
-	EpisodeFileCount int `json:"episodeFileCount,omitempty"`
-	Status string `json:"status,omitempty"`
-	Overview string `json:"overview,omitempty"`
-	NextAiring time.Time `json:"nextAiring,omitempty"`
-	Network string `json:"network,omitempty"`
-	AirTime string `json:"airTime,omitempty"`
-	Images []struct {
-		CoverType string `json:"coverType,omitempty"`
-		URL string `json:"url,omitempty"`
-	} `json:"images,omitempty"`
-	Seasons []struct {
-		SeasonNumber int `json:"seasonNumber,omitempty"`
-		Monitored bool `json:"monitored,omitempty"`
-	} `json:"seasons,omitempty"`
-	Year int `json:"year,omitempty"`
-	Path string `json:"path,omitempty"`
-	QualityProfileID int `json:"qualityProfileId,omitempty"`
-	SeasonFolder bool `json:"seasonFolder,omitempty"`
-	Monitored bool `json:"monitored,omitempty"`
-	UseSceneNumbering bool `json:"useSceneNumbering,omitempty"`
-	Runtime int `json:"runtime,omitempty"`
-	TvdbID int `json:"tvdbId,omitempty"`
-	TvRageID int `json:"tvRageId,omitempty"`
-	FirstAired time.Time `json:"firstAired,omitempty"`
-	LastInfoSync time.Time `json:"lastInfoSync,omitempty"`
-	SeriesType string `json:"seriesType,omitempty"`
-	CleanTitle string `json:"cleanTitle,omitempty"`
-	ImdbID string `json:"imdbId,omitempty"`
-	TitleSlug string `json:"titleSlug,omitempty"`
-	ID int `json:"id,omitempty"`
+type SonarrFolder struct {
+	Path string `json:"path"`
+	FreeSpace int64 `json:"freeSpace"`
+	UnmappedFolders []struct {
+		Name string `json:"name"`
+		Path string `json:"path"`
+	} `json:"unmappedFolders"`
+	ID int `json:"id"`
 }
 
-type SeriesLookupGetResponse []struct {
+type SonarrSeries struct {
 	Title string `json:"title,omitempty"`
+	AlternateTitles []interface{} `json:"alternateTitles,omitempty"`
+	SortTitle string `json:"sortTitle,omitempty"`
+	TotalEpisodeCount int `json:"totalEpisodeCount,omitempty"`
+
 	SeasonCount int `json:"seasonCount,omitempty"`
 	EpisodeCount int `json:"episodeCount,omitempty"`
 	EpisodeFileCount int `json:"episodeFileCount,omitempty"`
@@ -67,4 +45,13 @@ type SeriesLookupGetResponse []struct {
 	CleanTitle string `json:"cleanTitle,omitempty"`
 	ImdbID string `json:"imdbId,omitempty"`
 	TitleSlug string `json:"titleSlug,omitempty"`
+	Path string `json:"path,omitempty"`
+	FirstAired time.Time `json:"firstAired,omitempty"`
+	LastInfoSync time.Time `json:"lastInfoSync,omitempty"`
+	SizeOnDisk int `json:"sizeOnDisk,omitempty"`
+	TvMazeID int `json:"tvMazeId,omitempty"`
+	Genres []interface{} `json:"genres,omitempty"`
+	Tags []interface{} `json:"tags,omitempty"`
+	Added time.Time `json:"added,omitempty"`
+	ID int `json:"id,omitempty"`
 }
