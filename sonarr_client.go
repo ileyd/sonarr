@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"errors"
 	"strings"
+	"bytes"
 )
 
 type SonarrClient struct {
@@ -60,12 +61,19 @@ func (sc *SonarrClient) DoRequest(action, path string, params map[string]string,
 	lookupUrl.RawQuery = parameters.Encode()
 	lookupUrl.Path += path
 
-	req, err := http.NewRequest(action, lookupUrl.String(), nil)
+	jsonValue, err := json.Marshal(reqData)
 
 	if err != nil {
 		return err
 	}
 
+	req, err := http.NewRequest(action, lookupUrl.String(), bytes.NewBuffer(jsonValue))
+
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("X-Api-Key", sc.apiKey)
 
 	response, err := sc.HttpClient.Do(req)
