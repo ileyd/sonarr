@@ -46,20 +46,24 @@ func NewSonarrClient(address string, apiKey string) (*SonarrClient, error) {
 	}, nil
 }
 
-func (sc *SonarrClient) SeriesLookup(term string) (SeriesLookupResponse, error) {
-
+func (sc *SonarrClient) DoRequest(action, path string, params map[string]string, reqData, resData interface{}) error {
 	lookupUrl := *sc.address
 
 	parameters := url.Values{}
-	parameters.Add("term", term)
+
+	if params != nil {
+		for k, v := range params {
+			parameters.Add(k, v)
+		}
+	}
 
 	lookupUrl.RawQuery = parameters.Encode()
-	lookupUrl.Path += "series/lookup"
+	lookupUrl.Path += path
 
-	req, err := http.NewRequest("GET", lookupUrl.String(), nil)
+	req, err := http.NewRequest(action, lookupUrl.String(), nil)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	req.Header.Add("X-Api-Key", sc.apiKey)
@@ -67,20 +71,18 @@ func (sc *SonarrClient) SeriesLookup(term string) (SeriesLookupResponse, error) 
 	response, err := sc.HttpClient.Do(req)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return nil, errors.New(fmt.Sprintf("Status code %v", response.StatusCode))
+		return errors.New(fmt.Sprintf("Status code %v", response.StatusCode))
 	}
 
-	var rv SeriesLookupResponse
-
-	err = json.NewDecoder(response.Body).Decode(&rv)
+	err = json.NewDecoder(response.Body).Decode(resData)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return rv, nil
+	return nil
 }
