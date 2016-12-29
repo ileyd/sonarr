@@ -4,7 +4,7 @@ import "fmt"
 
 func (sc *SonarrClient) SeriesLookup(term string) (SeriesLookupGetResponse, error) {
 
-	var rv *SeriesLookupGetResponse
+	rv := &SeriesLookupGetResponse{}
 
 	err := sc.DoRequest("GET", "series/lookup", map[string]string{"term":term}, nil, rv)
 
