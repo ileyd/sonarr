@@ -9,6 +9,7 @@ import (
 	"strings"
 	"bytes"
 	"io/ioutil"
+	"github.com/Sirupsen/logrus"
 )
 
 type SonarrClient struct {
@@ -67,6 +68,8 @@ func (sc *SonarrClient) DoRequest(action, path string, params map[string]string,
 	if err != nil {
 		return err
 	}
+
+	logrus.Debugf("Calling Sonarr at %v", lookupUrl.String())
 
 	req, err := http.NewRequest(action, lookupUrl.String(), bytes.NewBuffer(jsonValue))
 
