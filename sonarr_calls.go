@@ -7,6 +7,10 @@ import (
 
 func (sc *SonarrClient) SeriesLookup(term string) ([]SonarrSeries, error) {
 
+	if term == "" {
+		return nil, errors.New("No term specified")
+	}
+
 	rv := &[]SonarrSeries{}
 
 	err := sc.DoRequest("GET", "series/lookup", map[string]string{"term":term}, nil, rv)
