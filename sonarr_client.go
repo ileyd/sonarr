@@ -87,6 +87,12 @@ func (sc *SonarrClient) DoRequest(action, path string, params map[string]string,
 	}
 
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		bodyBytes, err := ioutil.ReadAll(response.Body)
+
+		if err == nil {
+			logrus.Debugf("Failing (%v) call returned:\n%v", response.StatusCode, string(bodyBytes))
+		}
+
 		return errors.New(fmt.Sprintf("Status code %v", response.StatusCode))
 	}
 
