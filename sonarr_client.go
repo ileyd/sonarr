@@ -97,10 +97,7 @@ func (sc *SonarrClient) DoRequest(action, path string, params map[string]string,
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
-	fmt.Println(string(body))
 	err = json.NewDecoder(bytes.NewBuffer(body)).Decode(resData)
-
-	//err = json.NewDecoder(response.Body).Decode(resData)
 
 	if err != nil {
 		return err
