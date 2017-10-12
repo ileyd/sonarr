@@ -1,7 +1,8 @@
-package go_sonarr
+package sonarr
 
 import (
 	"fmt"
+
 	"github.com/juju/errors"
 )
 
@@ -13,7 +14,7 @@ func (sc *SonarrClient) SeriesLookup(term string) ([]SonarrSeries, error) {
 
 	rv := &[]SonarrSeries{}
 
-	err := sc.DoRequest("GET", "series/lookup", map[string]string{"term":term}, nil, rv)
+	err := sc.DoRequest("GET", "series/lookup", map[string]string{"term": term}, nil, rv)
 
 	if err != nil {
 		return nil, errors.Annotate(err, "Failed to lookup series")
@@ -22,6 +23,17 @@ func (sc *SonarrClient) SeriesLookup(term string) ([]SonarrSeries, error) {
 	return *rv, nil
 }
 
+func (sc *SonarrClient) GetAllSeries() ([]SonarrSeries, error) {
+	rv := &[]SonarrSeries{}
+
+	err := sc.DoRequest("GET", "series", nil, nil, rv)
+
+	if err != nil {
+		return nil, errors.Annotate(err, "Failed to fetch series")
+	}
+
+	return *rv, nil
+}
 
 func (sc *SonarrClient) CreateSeries(tvdbId int) (SonarrSeries, error) {
 	//first lookup data
@@ -59,7 +71,7 @@ func (sc *SonarrClient) CreateSeries(tvdbId int) (SonarrSeries, error) {
 	return spr_out, nil
 }
 
-func (sc *SonarrClient) RootFolder() ([]SonarrFolder, error){
+func (sc *SonarrClient) RootFolder() ([]SonarrFolder, error) {
 	var rv []SonarrFolder
 
 	//then add it

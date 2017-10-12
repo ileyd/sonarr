@@ -1,20 +1,21 @@
-package go_sonarr
+package sonarr
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"encoding/json"
-	"fmt"
-	"errors"
 	"strings"
-	"bytes"
-	"io/ioutil"
+
 	"github.com/Sirupsen/logrus"
 )
 
 type SonarrClient struct {
-	address *url.URL
-	apiKey string
+	address    *url.URL
+	apiKey     string
 	HttpClient *http.Client
 }
 
@@ -43,9 +44,9 @@ func NewSonarrClient(address string, apiKey string) (*SonarrClient, error) {
 	}
 
 	return &SonarrClient{
-		address:addressUrl,
-		apiKey:apiKey,
-		HttpClient:http.DefaultClient,
+		address:    addressUrl,
+		apiKey:     apiKey,
+		HttpClient: http.DefaultClient,
 	}, nil
 }
 
