@@ -1,6 +1,8 @@
 package sonarr
 
 import (
+	"log"
+	"strconv"
 	"time"
 
 	"github.com/juju/errors"
@@ -25,20 +27,21 @@ type Episode struct {
 }
 
 func (sc *SonarrClient) GetAllEpisodes(seriesID int) (e []Episode, err error) {
-	err = sc.DoRequest("GET", "episode", map[string]string{"seriesId": string(seriesID)}, nil, &e)
+	log.Println("Received seriesID", seriesID)
+	err = sc.DoRequest("GET", "episode", map[string]string{"seriesId": strconv.Itoa(seriesID)}, nil, &e)
 
 	if err != nil {
-		return []Episode{}, errors.Annotate(err, "Failed to get episodes for series "+string(seriesID))
+		return []Episode{}, errors.Annotate(err, "Failed to get episodes for series "+strconv.Itoa(seriesID))
 	}
 
 	return e, nil
 }
 
 func (sc *SonarrClient) GetEpisode(eID int) (e Episode, err error) {
-	err = sc.DoRequest("GET", "episode", map[string]string{"id": string(eID)}, nil, &e)
+	err = sc.DoRequest("GET", "episode", map[string]string{"id": strconv.Itoa(eID)}, nil, &e)
 
 	if err != nil {
-		return Episode{}, errors.Annotate(err, "Failed to get episode file "+string(eID))
+		return Episode{}, errors.Annotate(err, "Failed to get episode file "+strconv.Itoa(eID))
 	}
 
 	return e, nil
@@ -48,7 +51,7 @@ func (sc *SonarrClient) UpdateEpisode(e Episode) (er Episode, err error) {
 	err = sc.DoRequest("PUT", "episode", nil, e, &er)
 
 	if err != nil {
-		return Episode{}, errors.Annotate(err, "Failed to update episode "+string(e.ID))
+		return Episode{}, errors.Annotate(err, "Failed to update episode "+strconv.Itoa(e.ID))
 	}
 
 	return er, nil

@@ -1,6 +1,7 @@
 package sonarr
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/juju/errors"
@@ -24,30 +25,30 @@ type EpisodeFile struct {
 }
 
 func (sc *SonarrClient) GetAllEpisodeFiles(seriesID int) (ef []EpisodeFile, err error) {
-	err = sc.DoRequest("GET", "episodeFile", map[string]string{"seriesId": string(seriesID)}, nil, &ef)
+	err = sc.DoRequest("GET", "episodeFile", map[string]string{"seriesId": strconv.Itoa(seriesID)}, nil, &ef)
 
 	if err != nil {
-		return []EpisodeFile{}, errors.Annotate(err, "Failed to get episode files for series "+string(seriesID))
+		return []EpisodeFile{}, errors.Annotate(err, "Failed to get episode files for series "+strconv.Itoa(seriesID))
 	}
 
 	return ef, nil
 }
 
 func (sc *SonarrClient) GetEpisodeFile(efID int) (ef EpisodeFile, err error) {
-	err = sc.DoRequest("GET", "episodeFile", map[string]string{"id": string(efID)}, nil, &ef)
+	err = sc.DoRequest("GET", "episodeFile", map[string]string{"id": strconv.Itoa(efID)}, nil, &ef)
 
 	if err != nil {
-		return EpisodeFile{}, errors.Annotate(err, "Failed to get episode file "+string(efID))
+		return EpisodeFile{}, errors.Annotate(err, "Failed to get episode file "+strconv.Itoa(efID))
 	}
 
 	return ef, nil
 }
 
 func (sc *SonarrClient) DeleteEpisodeFile(efID int) (err error) {
-	err = sc.DoRequest("DELETE", "episodeFile", map[string]string{"id": string(efID)}, nil, nil)
+	err = sc.DoRequest("DELETE", "episodeFile", map[string]string{"id": strconv.Itoa(efID)}, nil, nil)
 
 	if err != nil {
-		return errors.Annotate(err, "Failed to delete episode file "+string(efID))
+		return errors.Annotate(err, "Failed to delete episode file "+strconv.Itoa(efID))
 	}
 
 	return nil
